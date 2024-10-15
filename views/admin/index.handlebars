@@ -1,0 +1,44 @@
+<link rel="stylesheet" href="/css/index.css" />
+
+<h1>Negão Variedades</h1>
+<h4>Delivery mais rápido da região e melhor atendimento da cidade!</h4>
+<hr />
+
+<div class="card-container">
+  <!-- Contêiner para os cards -->
+  {{#each categorias}}
+    <div class="card">
+      <div class="card-body">
+
+        <img
+          class="imagem-produto"
+          src="/uploads/{{imagem}}"
+          alt="{{nome}}"
+          class="imagem-produto"
+        />
+        <h4>{{nome}}</h4>
+        <small>R$ {{preco}}</small>
+        <br />
+
+        <form action="/admin/adcionarCarrinho/{{nome}}" method="post">
+          <div class="card-body">
+            <input type="hidden" name="nome" value="{{nome}}" />
+            <input type="number" name="quantidade" value="1" min="1" />
+            <button class="btn btn-success btn-pequeno" type="submit">
+              Adicionar ao Carrinho
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  {{else}}
+    <p>Nenhuma categoria encontrada.</p>
+  {{/each}}
+</div>
+
+<div id="carrinho" class="carrinho">
+  <h3>Seu Carrinho</h3>
+  <ul id="itensCarrinho"></ul>
+  <button onclick="fecharCarrinho()">Fechar</button>
+</div>

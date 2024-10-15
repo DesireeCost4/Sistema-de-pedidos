@@ -1,0 +1,29 @@
+<div class="produtos">
+  {{#each categorias}}
+    <div class="card">
+      <img
+        src="/uploads/{{this.imagem}}"
+        alt="Imagem de {{this.nome}}"
+        class="imagem-produto"
+      />
+      <h3>{{this.nome}}</h3>
+      <p>Preço: R$ {{this.preco}}</p>
+
+      <label for="quantidade-{{this._id}}">Quantidade: </label>
+      <input
+        type="number"
+        id="quantidade-{{this._id}}"
+        name="quantidade"
+        value="1"
+        min="1"
+      />
+
+      <button
+        type="button"
+        onclick="adicionarAoCarrinho('{{this._id}}', document.getElementById('quantidade-{{this._id}}').value)"
+      >
+        Adicionar ao Carrinho
+      </button>
+    </div>
+  {{/each}}
+</div>

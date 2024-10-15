@@ -1,0 +1,53 @@
+{{#each erros}}
+<div class="alert alert-danger">
+  {{texto}}
+</div>
+{{else}}
+
+{{/each}}
+
+<h3>Novo produto:</h3>
+
+
+<div class="card">
+
+<form action="/admin/categorias/nova" method="post" enctype="multipart/form-data">
+<div class="card-body">
+  <label for="nome">Produto:</label>
+  <input
+    type="text"
+    id="nome"
+    name="nome"
+    placeholder="Nome do produto"
+    class="form-control"
+  />
+  <label for="nome">Preço:</label>
+  <input
+    type="text"
+    id="preco"
+    name="preco"
+    placeholder="Valor do produto"
+    class="form-control"
+  />
+  <label for="slug">Slug: </label>
+  <input
+    type="text"
+    id="slug"
+    name="slug"
+    placeholder="Slug do produto"
+    class="form-control"
+  />
+
+  <label for="imagem">Imagem do produto:</label>
+      <input
+        type="file"
+        id="imagem"
+        name="imagem"
+        class="form-control"
+      />
+  <br />
+  <button type="submit" class="btn btn-success">Cadastrar produto</button>
+</form>
+
+</div>
+</div>

@@ -1,0 +1,99 @@
+/* styles/index.css */
+.card-container {
+  display: flex; /* Ativa o modo flexbox */
+  flex-wrap: wrap; /* Permite que os itens quebrem para a linha seguinte se necessário */
+  justify-content: space-between; /* Espaço uniforme entre os cards */
+}
+
+.card {
+  background-color: #fff; /* Cor de fundo do card */
+  border: 1px solid #ddd; /* Borda do card */
+  border-radius: 8px; /* Bordas arredondadas */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra do card */
+  margin: 10px; /* Margem ao redor do card */
+  padding: 15px; /* Espaçamento interno do card */
+  width: calc(
+    30% - 20px
+  ); /* Ajuste a largura do card (três cards em uma linha) */
+  transition: transform 0.3s; /* Transição suave ao passar o mouse */
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Efeito de hover */
+}
+
+.produto-carrinho {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espaçamento entre os elementos */
+}
+
+.quantidade-control {
+  display: flex;
+  align-items: center;
+}
+
+.input-pequeno {
+  width: 50px;
+  text-align: center;
+  margin: 0 5px;
+}
+
+.btn-dec,
+.btn-inc {
+  width: 30px;
+  height: 30px;
+  background-color: #ccc;
+  border: 1px solid #999;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.imagem-produto {
+  max-width: 100%; /* Faz com que a imagem não exceda a largura do card */
+  height: auto; /* Mantém a proporção da imagem */
+  margin-top: 10px; /* Adiciona um espaço entre o preço e a imagem */
+}
+
+.carrinho {
+  position: fixed;
+  top: 0;
+  right: -300px; /* Fica fora da tela por padrão */
+  width: 300px;
+  height: 100%;
+  background-color: #f8f8f8;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+  transition: right 0.3s ease; /* Transição suave */
+  padding: 20px;
+  display: none; /* Oculta a aba */
+}
+
+.carrinho.ativa {
+  display: block; /* Mostra a aba quando ativada */
+  right: 0; /* Move a aba para a direita */
+}
+
+/* Media Queries para responsividade */
+@media (max-width: 768px) {
+  .card {
+    width: calc(100% - 20px); /* Ocupa 100% da largura em telas pequenas */
+  }
+}
+
+@media (min-width: 769px) {
+  .card {
+    width: calc(48% - 20px); /* Ocupa 48% da largura em telas médias */
+  }
+  .imagem-produto {
+    max-width: 100%; /* Faz com que a imagem não exceda a largura do card */
+    height: auto; /* Mantém a proporção da imagem */
+    margin-top: 10px; /* Adiciona um espaço entre o preço e a imagem */
+  }
+}
+
+@media (min-width: 1024px) {
+  .card {
+    width: calc(30% - 20px); /* Ocupa 30% da largura em telas grandes */
+  }
+}
