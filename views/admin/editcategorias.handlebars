@@ -11,7 +11,7 @@
 
 <div class="card">
 
-<form action="/admin/categorias/edit" method="post">
+<form action="/admin/categorias/edit" method="post" enctype="multipart/form-data">
 <div class="card-body">
 <input type="hidden" name="id" value="{{categoria._id}}">
   <label for="nome">Produto: </label>
@@ -37,6 +37,10 @@
     value="{{categoria.slug}}"
 
   />
+
+     <label for="imagem">Imagem do Produto: </label>
+  <input type="file" id="imagem" name="imagem" class="form-control" />
+
   <br />
   <button type="submit" class="btn btn-success">Editar produto</button>
 </form>

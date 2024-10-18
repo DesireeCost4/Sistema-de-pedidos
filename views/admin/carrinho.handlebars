@@ -1,10 +1,67 @@
-{{#each carrinho}}
-  <li>
-    Produto:
-    {{this.nomeProduto}}
-    - Quantidade:
-    {{this.quantidade}}
-    - Preço: R$
-    {{preco}}
-  </li>
-{{/each}}
+<ul class="carrinho-lista">
+  {{#each carrinho}}
+    <li>
+      <form action="/admin/atualizarCarrinho" method="post">
+        <!-- Nome do produto como campo oculto -->
+        <input type="hidden" name="nome" value="{{this.nomeProduto}}" />
+        <input type="hidden" name="preco" value="{{this.preco}}" />
+
+        <div class="produto-info">
+          <span class="produto-nome">{{this.nomeProduto}}</span>
+          <span class="produto-preco">Preço Unitário: R$ {{this.preco}}</span>
+          <span class="produto-total">Total: R$ {{this.precoTotal}}</span>
+        </div>
+
+        <!-- Campo de entrada para a quantidade -->
+        <input
+          type="number"
+          name="quantidade"
+          value="{{this.quantidade}}"
+          min="1"
+          style="width: 60px; margin-left: 10px;"
+        />
+
+        <!-- Botão para enviar o formulário e atualizar a quantidade -->
+        <button class="btn btn-primary" type="submit">Atualizar</button>
+        <!-- Botão para remover o item do carrinho -->
+        <button
+          class="btn btn-danger"
+          formaction="/admin/removerCarrinho/{{this.nomeProduto}}"
+          type="submit"
+        >Remover</button>
+      </form>
+    </li>
+  {{/each}}
+</ul>
+
+<div class="checkout-form">
+  <form action="/admin/enviarCarrinhoWhatsApp" method="POST">
+    <div class="form-group">
+      <label for="nomeCliente">Nome do Cliente:</label>
+      <input type="text" id="nomeCliente" name="nomeCliente" required />
+    </div>
+
+    <div class="form-group">
+      <label for="endereco">Endereço:</label>
+      <input type="text" id="endereco" name="endereco" required />
+    </div>
+
+    <div class="form-group">
+      <label for="formaPagamento">Forma de Pagamento:</label>
+      <select id="formaPagamento" name="formaPagamento" required>
+        <option value="Dinheiro">Dinheiro</option>
+        <option value="Cartão de Crédito">Cartão de Crédito</option>
+        <option value="Cartão de Débito">Cartão de Débito</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="troco">Troco para (se necessário):</label>
+      <input type="number" id="troco" name="troco" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Finalizar pedido</button>
+  </form>
+</div>
+
+<link rel="stylesheet" href="/css/carrinho.css" />

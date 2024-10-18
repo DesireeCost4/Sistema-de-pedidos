@@ -1,0 +1,7 @@
+.navbar-nav.ms-auto {
+  margin-right: 20px; /* Garante um espaçamento externo entre o carrinho e o canto da tela */
+}
+
+.navbar {
+  padding-right: 30px; /* Para garantir que a barra de navegação em si tenha um padding interno suficiente */
+}
