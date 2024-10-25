@@ -41,6 +41,8 @@ const handlebars = exphbs.create({
     allowProtoPropertiesByDefault: true,
     allowProtoMethodsByDefault: true,
   },
+  layoutsDir: __dirname + "/views/layouts",
+  partialsDir: __dirname + "/views/partials",
 });
 app.engine("handlebars", handlebars.engine);
 app.set("view engine", "handlebars");

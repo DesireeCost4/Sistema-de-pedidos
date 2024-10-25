@@ -1,129 +1,35 @@
-.carrinho-lista {
-  list-style-type: none; /* Remove as bolinhas da lista */
-  padding: 0; /* Remove o padding padrão */
-  margin: 20px 0; /* Adiciona espaçamento acima e abaixo da lista */
-}
-
-.carrinho-lista li {
-  margin-bottom: 15px; /* Espaçamento entre os itens da lista */
-  padding: 10px; /* Espaçamento interno */
-  border: 1px solid #ddd; /* Borda leve */
-  border-radius: 4px; /* Bordas arredondadas */
-  background-color: #f9f9f9; /* Fundo claro */
-  display: flex; /* Usa flexbox para alinhar itens */
-  align-items: center; /* Centraliza verticalmente */
-}
-
-.produto-info {
-  display: flex; /* Usa flexbox para organizar as informações */
-  flex-direction: column; /* Alinha os itens verticalmente */
-  margin-right: 15px; /* Espaçamento à direita do box */
-}
-
-.produto-nome,
-.produto-preco,
-.produto-total {
-  margin: 2px 0; /* Espaçamento entre as linhas de informações */
-}
-
-.carrinho-lista form {
-  display: flex; /* Flex para alinhar os campos dentro do form */
-  align-items: center; /* Centraliza verticalmente */
-}
-
-.carrinho-lista button {
-  padding: 5px 10px; /* Tamanho do botão */
-  margin-left: 5px; /* Espaçamento entre os botões */
-  font-size: 14px; /* Tamanho da fonte */
-}
-
-.carrinho-item {
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.produto-info {
-  flex: 1;
-}
-
-.input-quantidade {
-  width: 60px;
-  margin-right: 10px;
-}
-
-.form-carrinho {
-  display: flex;
-  align-items: center;
-}
-
-.btn {
-  margin-left: 5px;
-}
-
-.checkout-form {
-  margin-top: 20px;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column; /* Mantenha os rótulos e campos em coluna */
-  align-items: center; /* Centraliza os itens dentro do form-group */
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  margin-bottom: 5px; /* Espaçamento entre o rótulo e o campo */
-}
-
-.form-group input,
-.form-group select {
-  width: 100%; /* Definindo a largura dos campos */
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin: 0 auto; /* Centraliza os campos no contêiner */
-}
-
-.checkout-form {
-  margin-top: 20px;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column; /* Mantém a organização vertical */
-  align-items: center; /* Centraliza o conteúdo do checkout */
-}
-
-.checkout-form button {
-  width: 100%; /* Define a largura do botão para se alinhar com os campos de entrada */
-  padding: 10px; /* Ajuste o padding conforme necessário */
-  border: none; /* Remove borda padrão */
-  border-radius: 4px; /* Mantém bordas arredondadas */
-  background-color: #28a745; /* Cor do fundo do botão */
-  color: white; /* Cor do texto */
-  cursor: pointer; /* Altera o cursor para indicar que é clicável */
-  margin-top: 15px; /* Espaçamento entre os campos e o botão */
-}
-
-.input-nome-cliente,
-.input-endereco,
-.input-troco,
-.select-pagamento {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.btn-success {
-  background-color: #28a745;
+/* Estilo para o off-canvas */
+.off-canvas {
+  position: fixed;
+  top: 0;
+  right: -350px; /* Inicialmente fora da tela */
+  width: 350px;
+  height: 100%;
+  background-color: #333;
   color: white;
+  padding: 20px;
+  transition: 0.3s ease;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.off-canvas h2 {
+  margin-top: 0;
+}
+
+.close-btn {
+  font-size: 30px;
+  border: none;
+  background: none;
+  color: white;
+  cursor: pointer;
+  float: right;
+}
+
+body.open-canvas #offCanvas {
+  right: 0; /* Move o painel para dentro da tela */
+}
+
+.btn-cart:hover {
+  background-color: #218838;
 }

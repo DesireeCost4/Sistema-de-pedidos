@@ -1,87 +1,125 @@
-/* Fundo escuro */
-body {
-  background-color: #222;
-  color: white;
-  font-family: Arial, sans-serif;
-  text-align: center;
-}
-
-/* Título principal */
-h1 {
-  color: #f8f9fa;
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-}
-
-/* Subtítulo */
-h4 {
-  color: #d3d3d3;
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-}
-
-/* Cards com fundo branco e borda arredondada */
 .card {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin: 15px;
-  width: 250px;
-  display: inline-block;
-  vertical-align: top;
+  padding: 10px;
+  margin: 10px;
+  width: 160px;
+  height: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-/* Imagem dos produtos */
+.card-body {
+  height: 240px;
+  text-align: center;
+}
+
+/* Img produtos */
 .imagem-produto {
   width: 100%;
-  height: 150px;
+  height: 100px;
   object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 10px;
+  border-radius: 4px;
+  margin-bottom: 5px;
 }
 
-/* Texto dos cards */
+/* txt dos cards */
 .card h4 {
+  text-align: center;
   color: #333;
-  margin-bottom: 10px;
+  font-size: 0.8rem;
+  margin: 3px 0;
 }
 
 .card small {
   color: #666;
+  font-size: 0.8rem;
 }
 
-/* Botão pequeno e estilizado */
+/* Botão */
 .btn-pequeno {
-  padding: 5px 10px;
-  font-size: 0.9rem;
+  padding: 3px 5px;
+  font-size: 0.7rem;
   background-color: #28a745;
   color: white;
   border: none;
   border-radius: 5px;
+  margin-top: auto;
 }
 
 .btn-pequeno:hover {
   background-color: #218838;
 }
 
-/* Estilo do contêiner dos cards */
+/* contêiner dos cards */
 .card-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-around;
 }
 
-/* Definir altura do carrossel */
-.carousel {
-  max-width: 100%;
-  margin: 0 auto;
-  border-radius: 10px;
+.mini-icon {
+  display: inline-block;
+  width: 30px; /* Largura da imagem */
+  height: 30px; /* Altura da imagem */
+  background-image: url("/uploads/sacolas-de-compras.png"); /* Caminho da imagem */
+  background-size: contain; /* Faz com que a imagem se ajuste ao tamanho do elemento */
+  background-repeat: no-repeat; /* Evita que a imagem se repita */
+  background-position: center; /* Centraliza a imagem no elemento */
+  cursor: pointer; /* Mostra a mãozinha ao passar o mouse */
+  text-decoration: none; /* Remove sublinhado ou estilo de link */
+  margin-right: 10px;
 }
 
-.carousel-item img {
-  height: auto; /* Deixa a altura automática */
-  max-height: 300px; /* Defina a altura máxima que deseja */
-  object-fit: contain; /* Faz com que a imagem se ajuste ao contêiner sem cortar partes */
-  width: 100%; /* Para que a largura cubra o contêiner */
+.produto-card {
+  display: flex; /* Usar flexbox */
+  align-items: center; /* Alinhar itens no centro verticalmente */
+  border: 1px solid #ddd; /* Borda do card */
+  border-radius: 8px; /* Cantos arredondados */
+  padding: 15px; /* Espaçamento interno do card */
+  margin: 10px 0; /* Espaçamento entre os cards */
+}
+
+.produto-imagem {
+  width: 60px; /* Largura da miniatura do produto */
+  height: 60px; /* Altura da miniatura do produto */
+  margin-right: 15px; /* Espaçamento à direita da imagem */
+}
+
+.produto-info {
+  display: flex; /* Usar flexbox para organizar a informação do produto */
+  flex-direction: column; /* Alinhar os itens em coluna */
+  flex-grow: 1; /* Permitir que o espaço restante seja preenchido */
+}
+
+.produto-controle {
+  display: flex; /* Usar flexbox para os botões de controle */
+  justify-content: center; /* Centralizar os botões */
+  align-items: center; /* Alinhar verticalmente */
+  margin-top: 5px; /* Espaçamento acima dos botões */
+}
+
+.btn-quantidade {
+  width: 30px; /* Largura fixa dos botões */
+  height: 30px; /* Altura fixa dos botões */
+  display: flex; /* Flexbox para alinhar o conteúdo */
+  justify-content: center; /* Centraliza o conteúdo */
+  align-items: center; /* Alinha verticalmente */
+}
+
+.carrinho-lista {
+  list-style-type: none; /* Remove marcadores da lista */
+  padding: 0; /* Remove padding da lista */
+  margin: 0; /* Remove margin da lista */
+}
+
+.carrinho-lista li {
+  border-bottom: 1px solid #eee; /* Linha divisória entre produtos */
+  padding-bottom: 10px; /* Espaço abaixo de cada item */
+}
+
+.checkout-form {
+  margin-top: 20px; /* Espaço acima do formulário de checkout */
 }

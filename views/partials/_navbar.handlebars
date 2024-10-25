@@ -1,6 +1,8 @@
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Negão Variedades</a>
+    <a class="navbar-brand" href="/admin">Negão Variedades</a>
+
     <button
       class="navbar-toggler"
       type="button"
@@ -12,26 +14,35 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/admin">Home</a>
+
         </li>
       </ul>
       <ul class="navbar-nav ms-auto">
+
+        <a
+          id="openOffCanvas"
+          href="#"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offCanvas"
+          aria-controls="offCanvas"
+          class="mini-icon"
+        >
+        </a>
+
         <li class="nav-item">
-          <a href="/admin/carrinho">
+          <a href="/admin/categorias">
             <img
-              src="../../uploads/carrinho.png"
-              alt="Carrinho"
-              style="width:40px;height:40px;"
+              src="../../uploads/adm.png"
+              alt="adm"
+              style="width:30px;height:30px;"
             />
           </a>
         </li>
       </ul>
     </div>
   </div>
-
 </nav>
-
-<link rel="stylesheet" href="/css/navbar.css" />

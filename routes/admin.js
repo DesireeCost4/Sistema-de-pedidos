@@ -46,11 +46,44 @@ router.post("/login", (req, res) => {
   }
 });
 
-// Rota para listar produtos na view principal
 router.get("/", (req, res) => {
+  const carrinho = req.session.carrinho || [];
+  const { nomeProduto, action } = req.query;
+
+  if (nomeProduto && action) {
+    const produtoNoCarrinho = carrinho.find(
+      (item) => item.nomeProduto === nomeProduto
+    );
+
+    if (produtoNoCarrinho) {
+      if (action === "incrementar") {
+        produtoNoCarrinho.quantidade += 1;
+      } else if (action === "decrementar" && produtoNoCarrinho.quantidade > 1) {
+        produtoNoCarrinho.quantidade -= 1;
+      }
+
+      produtoNoCarrinho.precoTotal =
+        produtoNoCarrinho.quantidade * produtoNoCarrinho.preco;
+    }
+  }
+
+  const totalCarrinho = carrinho.reduce(
+    (total, item) => total + (item.precoTotal || 0),
+    0
+  );
+
+  // Verifica se o carrinho está vazio
+  const carrinhoVazio = carrinho.length === 0;
+
+  // Busca as categorias no banco de dados
   Categoria.find()
     .then((categorias) => {
-      res.render("admin", { categorias: categorias });
+      res.render("admin", {
+        categorias: categorias,
+        carrinho: carrinho, // Passa o carrinho para a view
+        carrinhoVazio: carrinhoVazio, // Indica se o carrinho está vazio
+        totalCarrinho: totalCarrinho.toFixed(2), // Passa o total do carrinho formatado
+      });
     })
     .catch((err) => {
       req.flash("error_msg", "Houve um erro ao listar os produtos");
@@ -58,6 +91,7 @@ router.get("/", (req, res) => {
     });
 });
 
+//
 // Rota para mostrar produtos cadastrados (apenas adms)
 router.get("/categorias", verificaAdmin, (req, res) => {
   Categoria.find()
@@ -141,7 +175,6 @@ router.get("/categorias/edit/:id", (req, res) => {
 
 // Rota para editar categorias
 router.post("/categorias/edit", upload.single("imagem"), (req, res) => {
-  console.log(req.file);
   Categoria.findOne({ _id: req.body.id })
     .then((categoria) => {
       if (!req.body.nome || !req.body.preco || !req.body.slug) {
@@ -197,13 +230,17 @@ router.post("/categorias/deletar", (req, res) => {
     });
 });
 
-router.post("/adcionarCarrinho/:nome", (req, res) => {
+router.post("/adcionarCarrinho/:nome", upload.single("imagem"), (req, res) => {
   console.log(req.body); // Log para depuração
+  console.log(req.file); // Log do arquivo recebido para verificar se está correto
 
   const nomeProduto = req.params.nome; // Pega o nome do produto da URL
   const idProduto = req.body.id; // Pega o ID do produto da requisição
   const quantidade = parseInt(req.body.quantidade) || 1; // Define como 1 se não for especificado
-  const preco = parseFloat(req.body.preco); // Pega o preço do corpo da requisição
+  const preco = parseFloat(req.body.preco.replace(",", "."));
+
+  // Verifica se o arquivo foi enviado e pega a imagem
+  const imagem = req.file ? `/uploads/${req.file.filename}` : null;
 
   // Verifica se existe um carrinho na sessão, senão cria um novo
   if (!req.session.carrinho) {
@@ -212,35 +249,33 @@ router.post("/adcionarCarrinho/:nome", (req, res) => {
 
   // Adiciona o produto ao carrinho
   const produtoNoCarrinho = req.session.carrinho.find(
-    (item) => item.nomeProduto === idProduto
+    (item) => item.nomeProduto === nomeProduto
   );
 
   if (produtoNoCarrinho) {
-    // Se o produto já está no carrinho, atualiza a quantidade
     produtoNoCarrinho.quantidade += quantidade;
+    produtoNoCarrinho.precoTotal =
+      produtoNoCarrinho.quantidade * produtoNoCarrinho.preco;
   } else {
-    // Senão, adiciona o novo produto ao carrinho
-    req.session.carrinho.push({ idProduto, nomeProduto, quantidade, preco });
+    const precoTotal = quantidade * preco;
+    req.session.carrinho.push({
+      idProduto,
+      nomeProduto,
+      quantidade,
+      preco,
+      precoTotal,
+      imagem, // Adiciona a imagem ao carrinho
+    });
   }
+
+  console.log("Carrinho Atualizado:", req.session.carrinho);
 
   req.flash("success_msg", "Produto adicionado ao carrinho!");
   res.redirect("/admin");
 });
 
-router.get("/carrinho", (req, res) => {
-  const carrinho = req.session.carrinho || [];
-  const carrinhoVazio = carrinho.length === 0;
-
-  res.render("admin/carrinho", {
-    categorias: [], // Você pode buscar categorias aqui se precisar
-    carrinho: carrinho,
-    carrinhoVazio: carrinhoVazio,
-  });
-});
-
 router.post("/atualizarCarrinho", (req, res) => {
-  const { nome, quantidade, preco } = req.body; // Captura nome e quantidade do corpo da requisição
-
+  const { nome, quantidade, preco } = req.body;
   // Verifica se o carrinho existe na sessão
   if (!req.session.carrinho) {
     return res.status(400).send("Carrinho não encontrado.");
@@ -249,31 +284,34 @@ router.post("/atualizarCarrinho", (req, res) => {
   // Atualiza a quantidade do item no carrinho e recalcula o preço total
   req.session.carrinho = req.session.carrinho.map((item) => {
     if (item.nomeProduto === nome) {
-      // Compara com o nome correto do produto
-      item.quantidade = parseInt(quantidade) || 1; // Atualiza a quantidade
-      item.preco = parseFloat(preco); // Atualiza o preço unitário do item
-      item.precoTotal = item.preco * item.quantidade; // Recalcula o preço total do item
+      if (item.quantidade !== undefined) {
+        // Verifica se quantidade está definida
+
+        // Compara com o nome correto do produto
+        item.quantidade = parseInt(quantidade) || 1; // Atualiza a quantidade
+        item.preco = parseFloat(preco); // Atualiza o preço unitário do item
+        item.precoTotal = item.preco * item.quantidade; // Recalcula o preço total do item
+      } else {
+        console.log("Item não encontrado ou quantidade não definida.");
+      }
     }
     return item;
   });
 
-  console.log(`Produto: ${nome}, Quantidade: ${quantidade}, Preço: ${preco}`);
-
-  res.redirect("/admin/carrinho"); // Redireciona de volta para o carrinho
+  res.redirect("/admin"); // Redireciona de volta para o carrinho
 });
 
 router.post("/removerCarrinho/:nome", (req, res) => {
   const nomeProduto = req.params.nome;
 
   if (req.session.carrinho) {
-    // Remove o produto com base no nome
     req.session.carrinho = req.session.carrinho.filter(
       (item) => item.nomeProduto !== nomeProduto
     );
   }
 
   req.flash("success_msg", "Produto removido do carrinho!");
-  res.redirect("/admin/carrinho"); // Redireciona para a página do carrinho
+  res.redirect("/admin"); // Redireciona para a página do admin
 });
 
 router.post("/enviarCarrinhoWhatsApp", (req, res) => {
