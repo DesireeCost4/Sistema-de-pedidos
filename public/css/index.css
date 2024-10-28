@@ -75,10 +75,9 @@
 
 .produto-card {
   display: flex; /* Usar flexbox */
-  align-items: center; /* Alinhar itens no centro verticalmente */
-  border: 1px solid #ddd; /* Borda do card */
+  border: 1px solid #ff0303; /* Borda do card */
   border-radius: 8px; /* Cantos arredondados */
-  padding: 15px; /* Espaçamento interno do card */
+  padding: 10px; /* Espaçamento interno do card */
   margin: 10px 0; /* Espaçamento entre os cards */
 }
 
@@ -89,6 +88,8 @@
 }
 
 .produto-info {
+ 
+
   display: flex; /* Usar flexbox para organizar a informação do produto */
   flex-direction: column; /* Alinhar os itens em coluna */
   flex-grow: 1; /* Permitir que o espaço restante seja preenchido */

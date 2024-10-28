@@ -35,6 +35,8 @@
   {{#each categorias}}
     <div class="card">
       <div class="card-body">
+
+        
         <img class="imagem-produto" src="{{imagem}}" alt="{{nome}}" />
 
         <h4>{{nome}}</h4>
@@ -86,15 +88,19 @@
           {{#each carrinho}}
             <li class="produto-card">
 
+              <div class="img-produto">
+
               <img
                 class="imagem-produto"
                 src="{{this.imagem}}"
                 alt="{{nome}}"
               />
 
+              </div>
+
               <div class="produto-info">
                 <span class="produto-nome">{{this.nomeProduto}}</span>
-                <span class="produto-preco">R$ {{this.preco}}</span>
+                <span class="produto-preco">R$ {{preco}}</span>
 
                 <div class="produto-controle">
                   <a
@@ -124,7 +130,7 @@
       {{/if}}
     </div>
     <div>
-      <strong>Total do Carrinho: R$ {{totalCarrinho}}</strong>
+      <strong>Total do Carrinho: R$ {{this.totalCarrinho}}</strong>
     </div>
     <div class="checkout-form">
       <form action="/admin/enviarCarrinhoWhatsApp" method="POST">

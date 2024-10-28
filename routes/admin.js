@@ -218,60 +218,111 @@ router.post("/categorias/edit", upload.single("imagem"), (req, res) => {
 });
 
 // Rota para deletar categorias
-router.post("/categorias/deletar", (req, res) => {
-  Categoria.deleteOne({ _id: req.body.id })
-    .then(() => {
-      req.flash("success_msg", "Categoria deletada com sucesso!");
-      res.redirect("/admin/categorias");
-    })
-    .catch((err) => {
-      req.flash("error_msg", "Houve um erro ao deletar produto");
-      res.redirect("/admin/categorias");
-    });
+router.post("/adcionarCarrinho/:nome", async (req, res) => {
+  try {
+    const nomeProduto = req.params.nome;
+    const quantidade = parseInt(req.body.quantidade) || 1;
+
+    // Recupera o produto pelo nome e verifica se ele existe
+    const produto = await Categoria.findOne({ nome: nomeProduto });
+    if (!produto) {
+      req.flash("error_msg", "Produto não encontrado.");
+      return res.redirect("/admin");
+    }
+
+    // Pega o ID, preço e imagem diretamente do banco de dados
+    const idProduto = produto._id;
+    const preco = parseFloat(produto.preco);
+    const imagem = produto.imagem;
+
+    // Verifica se o carrinho já existe na sessão; senão, cria um novo
+    if (!req.session.carrinho) {
+      req.session.carrinho = [];
+    }
+
+    // Verifica se o produto já está no carrinho
+    const produtoNoCarrinho = req.session.carrinho.find(
+      (item) => item.nomeProduto === nomeProduto
+    );
+
+    if (produtoNoCarrinho) {
+      produtoNoCarrinho.quantidade += quantidade;
+      produtoNoCarrinho.precoTotal = produtoNoCarrinho.quantidade * preco;
+    } else {
+      const precoTotal = quantidade * preco;
+      req.session.carrinho.push({
+        idProduto,
+        nomeProduto,
+        quantidade,
+        preco,
+        precoTotal,
+        imagem,
+      });
+    }
+
+    console.log("Carrinho Atualizado:", req.session.carrinho);
+    req.flash("success_msg", "Produto adicionado ao carrinho!");
+    res.redirect("/admin");
+  } catch (error) {
+    console.error("Erro ao adicionar produto ao carrinho:", error);
+    req.flash("error_msg", "Erro ao adicionar o produto ao carrinho.");
+    res.redirect("/admin");
+  }
 });
 
-router.post("/adcionarCarrinho/:nome", upload.single("imagem"), (req, res) => {
-  console.log(req.body); // Log para depuração
-  console.log(req.file); // Log do arquivo recebido para verificar se está correto
 
-  const nomeProduto = req.params.nome; // Pega o nome do produto da URL
-  const idProduto = req.body.id; // Pega o ID do produto da requisição
-  const quantidade = parseInt(req.body.quantidade) || 1; // Define como 1 se não for especificado
-  const preco = parseFloat(req.body.preco.replace(",", "."));
+router.post("/adcionarCarrinho/:nome", async (req, res) => {
+  try {
+        const nomeProduto = req.params.nome;
+        const idProduto = req.body.id;
+        const quantidade = parseInt(req.body.quantidade) || 1;
+        
+        const preco = req.body.preco ? parseFloat(req.body.preco.replace(",", ".")) : 0; // Define o preço
+        
+        console.log("Produto encontrado:", idProduto, preco); // Verifica ID e preço
 
-  // Verifica se o arquivo foi enviado e pega a imagem
-  const imagem = req.file ? `/uploads/${req.file.filename}` : null;
 
-  // Verifica se existe um carrinho na sessão, senão cria um novo
-  if (!req.session.carrinho) {
-    req.session.carrinho = [];
+
+        const produto = await Categoria.findOne({ nome: nomeProduto });
+        if (!produto) {
+        req.flash("error_msg", "Produto não encontrado.");
+        return res.redirect("/admin");
+        }
+
+        const imagem = produto.imagem; 
+
+        if (!req.session.carrinho) {
+        req.session.carrinho = [];
+        }
+
+        // Adiciona o produto ao carrinho
+    const produtoNoCarrinho = req.session.carrinho.find(
+      (item) => item.nomeProduto === nomeProduto
+    );
+
+    if (produtoNoCarrinho) {
+      produtoNoCarrinho.quantidade += quantidade;
+      produtoNoCarrinho.precoTotal = produtoNoCarrinho.quantidade * produtoNoCarrinho.preco;
+    } else {
+      const precoTotal = quantidade * preco;
+      req.session.carrinho.push({
+        idProduto,
+        nomeProduto,
+        quantidade,
+        preco,
+        precoTotal,
+        imagem,
+      });
+    }
+
+    console.log("Carrinho Atualizado:", req.session.carrinho);
+    req.flash("success_msg", "Produto adicionado ao carrinho!");
+    res.redirect("/admin");
+  } catch (error) {
+    console.error("Erro ao adicionar produto ao carrinho:", error);
+    req.flash("error_msg", "Erro ao adicionar o produto ao carrinho.");
+    res.redirect("/admin");
   }
-
-  // Adiciona o produto ao carrinho
-  const produtoNoCarrinho = req.session.carrinho.find(
-    (item) => item.nomeProduto === nomeProduto
-  );
-
-  if (produtoNoCarrinho) {
-    produtoNoCarrinho.quantidade += quantidade;
-    produtoNoCarrinho.precoTotal =
-      produtoNoCarrinho.quantidade * produtoNoCarrinho.preco;
-  } else {
-    const precoTotal = quantidade * preco;
-    req.session.carrinho.push({
-      idProduto,
-      nomeProduto,
-      quantidade,
-      preco,
-      precoTotal,
-      imagem, // Adiciona a imagem ao carrinho
-    });
-  }
-
-  console.log("Carrinho Atualizado:", req.session.carrinho);
-
-  req.flash("success_msg", "Produto adicionado ao carrinho!");
-  res.redirect("/admin");
 });
 
 router.post("/atualizarCarrinho", (req, res) => {
