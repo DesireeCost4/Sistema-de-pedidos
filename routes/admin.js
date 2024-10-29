@@ -47,6 +47,7 @@ router.post("/login", (req, res) => {
 });
 
 router.get("/", (req, res) => {
+  const openOffCanvas = req.query.openOffCanvas === "true";
   const carrinho = req.session.carrinho || [];
   const { nomeProduto, action } = req.query;
 
@@ -65,6 +66,9 @@ router.get("/", (req, res) => {
       produtoNoCarrinho.precoTotal =
         produtoNoCarrinho.quantidade * produtoNoCarrinho.preco;
     }
+
+    // Redireciona para abrir o offcanvas após a atualização da quantidade
+    return res.redirect("/admin?openOffCanvas=true");
   }
 
   const totalCarrinho = carrinho.reduce(
@@ -72,17 +76,16 @@ router.get("/", (req, res) => {
     0
   );
 
-  // Verifica se o carrinho está vazio
   const carrinhoVazio = carrinho.length === 0;
 
-  // Busca as categorias no banco de dados
   Categoria.find()
     .then((categorias) => {
       res.render("admin", {
+        openOffCanvas,
         categorias: categorias,
-        carrinho: carrinho, // Passa o carrinho para a view
-        carrinhoVazio: carrinhoVazio, // Indica se o carrinho está vazio
-        totalCarrinho: totalCarrinho.toFixed(2), // Passa o total do carrinho formatado
+        carrinho: carrinho,
+        carrinhoVazio: carrinhoVazio,
+        totalCarrinho: totalCarrinho.toFixed(2),
       });
     })
     .catch((err) => {
@@ -173,7 +176,7 @@ router.get("/categorias/edit/:id", (req, res) => {
     });
 });
 
-// Rota para editar categorias
+// Rota para editar produto
 router.post("/categorias/edit", upload.single("imagem"), (req, res) => {
   Categoria.findOne({ _id: req.body.id })
     .then((categoria) => {
@@ -217,7 +220,33 @@ router.post("/categorias/edit", upload.single("imagem"), (req, res) => {
     });
 });
 
-// Rota para deletar categorias
+// apagar produtos
+router.post("/categorias/deletar", async (req, res) => {
+  try {
+    const categoriaId = req.body.id;
+
+    if (!categoriaId) {
+      req.flash("error_msg", "ID da categoria não fornecido");
+      return res.redirect("/admin/categorias");
+    }
+
+    const categoria = await Categoria.findByIdAndDelete(categoriaId);
+
+    if (!categoria) {
+      req.flash("error_msg", "Categoria não encontrada");
+      return res.redirect("/admin/categorias");
+    }
+
+    req.flash("success_msg", "Categoria deletada com sucesso");
+    res.redirect("/admin/categorias");
+  } catch (err) {
+    console.error(err);
+    req.flash("error_msg", "Erro ao deletar a categoria: " + err.message);
+    res.redirect("/admin/categorias");
+  }
+});
+
+//inserir no carrinho
 router.post("/adcionarCarrinho/:nome", async (req, res) => {
   try {
     const nomeProduto = req.params.nome;
@@ -260,98 +289,15 @@ router.post("/adcionarCarrinho/:nome", async (req, res) => {
       });
     }
 
-    console.log("Carrinho Atualizado:", req.session.carrinho);
     req.flash("success_msg", "Produto adicionado ao carrinho!");
-    res.redirect("/admin");
+    res.redirect("/admin?openOffCanvas=true");
   } catch (error) {
     console.error("Erro ao adicionar produto ao carrinho:", error);
     req.flash("error_msg", "Erro ao adicionar o produto ao carrinho.");
     res.redirect("/admin");
   }
 });
-
-
-router.post("/adcionarCarrinho/:nome", async (req, res) => {
-  try {
-        const nomeProduto = req.params.nome;
-        const idProduto = req.body.id;
-        const quantidade = parseInt(req.body.quantidade) || 1;
-        
-        const preco = req.body.preco ? parseFloat(req.body.preco.replace(",", ".")) : 0; // Define o preço
-        
-        console.log("Produto encontrado:", idProduto, preco); // Verifica ID e preço
-
-
-
-        const produto = await Categoria.findOne({ nome: nomeProduto });
-        if (!produto) {
-        req.flash("error_msg", "Produto não encontrado.");
-        return res.redirect("/admin");
-        }
-
-        const imagem = produto.imagem; 
-
-        if (!req.session.carrinho) {
-        req.session.carrinho = [];
-        }
-
-        // Adiciona o produto ao carrinho
-    const produtoNoCarrinho = req.session.carrinho.find(
-      (item) => item.nomeProduto === nomeProduto
-    );
-
-    if (produtoNoCarrinho) {
-      produtoNoCarrinho.quantidade += quantidade;
-      produtoNoCarrinho.precoTotal = produtoNoCarrinho.quantidade * produtoNoCarrinho.preco;
-    } else {
-      const precoTotal = quantidade * preco;
-      req.session.carrinho.push({
-        idProduto,
-        nomeProduto,
-        quantidade,
-        preco,
-        precoTotal,
-        imagem,
-      });
-    }
-
-    console.log("Carrinho Atualizado:", req.session.carrinho);
-    req.flash("success_msg", "Produto adicionado ao carrinho!");
-    res.redirect("/admin");
-  } catch (error) {
-    console.error("Erro ao adicionar produto ao carrinho:", error);
-    req.flash("error_msg", "Erro ao adicionar o produto ao carrinho.");
-    res.redirect("/admin");
-  }
-});
-
-router.post("/atualizarCarrinho", (req, res) => {
-  const { nome, quantidade, preco } = req.body;
-  // Verifica se o carrinho existe na sessão
-  if (!req.session.carrinho) {
-    return res.status(400).send("Carrinho não encontrado.");
-  }
-
-  // Atualiza a quantidade do item no carrinho e recalcula o preço total
-  req.session.carrinho = req.session.carrinho.map((item) => {
-    if (item.nomeProduto === nome) {
-      if (item.quantidade !== undefined) {
-        // Verifica se quantidade está definida
-
-        // Compara com o nome correto do produto
-        item.quantidade = parseInt(quantidade) || 1; // Atualiza a quantidade
-        item.preco = parseFloat(preco); // Atualiza o preço unitário do item
-        item.precoTotal = item.preco * item.quantidade; // Recalcula o preço total do item
-      } else {
-        console.log("Item não encontrado ou quantidade não definida.");
-      }
-    }
-    return item;
-  });
-
-  res.redirect("/admin"); // Redireciona de volta para o carrinho
-});
-
+//retirar produto
 router.post("/removerCarrinho/:nome", (req, res) => {
   const nomeProduto = req.params.nome;
 
@@ -379,24 +325,21 @@ router.post("/enviarCarrinhoWhatsApp", (req, res) => {
     return res.redirect("/admin/carrinho");
   }
 
-  // Calcula o total do carrinho
   let valorTotal = 0;
-  let mensagem = `*Pedido de ${nomeCliente}*\n\nEndereço: ${endereco}\nForma de pagamento: ${formaPagamento}\n${troco}\n\n*Itens do Carrinho:*\n`;
+  let mensagem = `*Pedido de: ${nomeCliente}*\n\nEndereço: ${endereco}\nForma de pagamento: ${formaPagamento}\n${troco}\n\n *Itens do Carrinho:*\n`;
 
   carrinho.forEach((item) => {
     const subtotal = item.quantidade * item.preco;
-    valorTotal += subtotal; // Soma o subtotal de cada produto ao valor total
+    valorTotal += subtotal;
     mensagem += `Produto: ${item.nomeProduto}\nQuantidade: ${item.quantidade}\nPreço unitário: R$ ${item.preco}\nSubtotal: R$ ${subtotal}\n\n`;
   });
 
-  // Adiciona o valor total ao final da mensagem
   mensagem += `\n*Valor Total do Carrinho: R$ ${valorTotal.toFixed(2)}*`;
 
   const linkWhatsApp = `https://api.whatsapp.com/send?phone=5531999999999&text=${encodeURIComponent(
     mensagem
   )}`;
 
-  // Redireciona para o WhatsApp com a mensagem pronta
   res.redirect(linkWhatsApp);
 });
 

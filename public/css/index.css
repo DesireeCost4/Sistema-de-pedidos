@@ -1,3 +1,9 @@
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
 .card {
   background-color: #fff;
   border-radius: 10px;
@@ -5,15 +11,16 @@
   padding: 10px;
   margin: 10px;
   width: 160px;
-  height: 240px;
+  height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  cursor: pointer;
 }
 
-.card-body {
-  height: 240px;
-  text-align: center;
+.img-produto {
+  width: 80px;
+  height: 60px;
 }
 
 /* Img produtos */
@@ -25,7 +32,6 @@
   margin-bottom: 5px;
 }
 
-/* txt dos cards */
 .card h4 {
   text-align: center;
   color: #333;
@@ -36,91 +42,180 @@
 .card small {
   color: #666;
   font-size: 0.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Botão */
 .btn-pequeno {
   padding: 3px 5px;
   font-size: 0.7rem;
-  background-color: #28a745;
-  color: white;
+  background-color: rgb(255, 197, 0);
+  color: rgb(0, 0, 0);
   border: none;
+  height: 40px;
   border-radius: 5px;
   margin-top: auto;
 }
 
 .btn-pequeno:hover {
-  background-color: #218838;
-}
-
-/* contêiner dos cards */
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  background-color: rgb(255, 251, 0);
+  color: rgb(0, 0, 0);
 }
 
 .mini-icon {
   display: inline-block;
-  width: 30px; /* Largura da imagem */
-  height: 30px; /* Altura da imagem */
-  background-image: url("/uploads/sacolas-de-compras.png"); /* Caminho da imagem */
-  background-size: contain; /* Faz com que a imagem se ajuste ao tamanho do elemento */
-  background-repeat: no-repeat; /* Evita que a imagem se repita */
-  background-position: center; /* Centraliza a imagem no elemento */
-  cursor: pointer; /* Mostra a mãozinha ao passar o mouse */
-  text-decoration: none; /* Remove sublinhado ou estilo de link */
+  width: 30px;
+  height: 30px;
+  background-image: url("/uploads/sacolas-de-compras.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  text-decoration: none;
   margin-right: 10px;
 }
 
 .produto-card {
-  display: flex; /* Usar flexbox */
-  border: 1px solid #ff0303; /* Borda do card */
-  border-radius: 8px; /* Cantos arredondados */
-  padding: 10px; /* Espaçamento interno do card */
-  margin: 10px 0; /* Espaçamento entre os cards */
-}
-
-.produto-imagem {
-  width: 60px; /* Largura da miniatura do produto */
-  height: 60px; /* Altura da miniatura do produto */
-  margin-right: 15px; /* Espaçamento à direita da imagem */
+  display: flex;
+  margin: 10px 0;
+  height: 90px;
 }
 
 .produto-info {
- 
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 50px;
+}
 
-  display: flex; /* Usar flexbox para organizar a informação do produto */
-  flex-direction: column; /* Alinhar os itens em coluna */
-  flex-grow: 1; /* Permitir que o espaço restante seja preenchido */
+.produto-nome,
+.produto-preco {
+  font-weight: bold;
+  font-size: 15px;
+  padding-left: 8px;
 }
 
 .produto-controle {
-  display: flex; /* Usar flexbox para os botões de controle */
-  justify-content: center; /* Centralizar os botões */
-  align-items: center; /* Alinhar verticalmente */
-  margin-top: 5px; /* Espaçamento acima dos botões */
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding-left: 8px;
 }
 
 .btn-quantidade {
-  width: 30px; /* Largura fixa dos botões */
-  height: 30px; /* Altura fixa dos botões */
-  display: flex; /* Flexbox para alinhar o conteúdo */
-  justify-content: center; /* Centraliza o conteúdo */
-  align-items: center; /* Alinha verticalmente */
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.produto-quantidade {
+  padding: 5px;
+}
+
+.btn-remover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .carrinho-lista {
-  list-style-type: none; /* Remove marcadores da lista */
-  padding: 0; /* Remove padding da lista */
-  margin: 0; /* Remove margin da lista */
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
 .carrinho-lista li {
-  border-bottom: 1px solid #eee; /* Linha divisória entre produtos */
-  padding-bottom: 10px; /* Espaço abaixo de cada item */
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
 }
 
 .checkout-form {
-  margin-top: 20px; /* Espaço acima do formulário de checkout */
+  margin-top: 20px;
+}
+
+.checkout-form {
+  max-width: 250px;
+  margin: 5px auto;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.form-group {
+  margin-bottom: 5px;
+}
+
+label {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 12px;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 3px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  padding: 3px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+@media (max-width: 1200px) {
+  .card {
+    width: calc(25% - 20px);
+  }
+}
+
+@media (max-width: 992px) {
+  .card {
+    width: calc(33.33% - 20px);
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: calc(50% - 20px);
+  }
+}
+
+@media (max-width: 576px) {
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .card {
+    width: 80%;
+    margin: 5px 0;
+  }
+
+  .imagem-produto {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 5px;
+  }
 }

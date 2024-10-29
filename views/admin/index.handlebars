@@ -33,32 +33,21 @@
 
 <div class="card-container">
   {{#each categorias}}
-    <div class="card">
-      <div class="card-body">
-
-        
-        <img class="imagem-produto" src="{{imagem}}" alt="{{nome}}" />
-
-        <h4>{{nome}}</h4>
-        <small>R$ {{preco}}</small>
-        <br />
-
-        <form
-          action="/admin/adcionarCarrinho/{{nome}}"
-          method="post"
-          enctype="multipart/form-data"
-        >
-          <div class="card-body">
-            <input type="hidden" name="nome" value="{{nome}}" />
-            <input type="hidden" name="preco" value="{{preco}}" />
-            <button class="btn btn-success btn-pequeno" type="submit">
-              Adicionar ao Carrinho
-            </button>
-          </div>
-        </form>
-
+    <form
+      action="/admin/adcionarCarrinho/{{nome}}"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      <div class="card" onclick="this.closest('form').submit()">
+        <div class="card-body">
+          <img class="imagem-produto" src="{{imagem}}" alt="{{nome}}" />
+          <h4>{{nome}}</h4>
+          <small>R$ {{preco}}</small>
+          <input type="hidden" name="nome" value="{{nome}}" />
+          <input type="hidden" name="preco" value="{{preco}}" />
+        </div>
       </div>
-    </div>
+    </form>
   {{else}}
     <p>Nenhuma categoria encontrada.</p>
   {{/each}}
@@ -70,6 +59,7 @@
   tabindex="-1"
   aria-labelledby="offCanvasLabel"
 >
+
   <div class="offcanvas-header">
     <h5 id="offCanvasLabel">Carrinho</h5>
     <button
@@ -90,11 +80,7 @@
 
               <div class="img-produto">
 
-              <img
-                class="imagem-produto"
-                src="{{this.imagem}}"
-                alt="{{nome}}"
-              />
+                <img class="img-produto" src="{{this.imagem}}" alt="{{nome}}" />
 
               </div>
 
@@ -122,7 +108,12 @@
                 method="POST"
                 class="d-inline"
               >
-                <button type="submit" class="btn btn-danger">Remover</button>
+                <button type="submit" class="btn btnbdanger btn-remover">
+                  <img
+                    src="/uploads/lixeira-de-reciclagem.png"
+                    alt="Remover"
+                    style="width: 20px; height: 20px; margin-right: 5px;"
+                  /></button>
               </form>
             </li>
           {{/each}}
@@ -159,3 +150,24 @@
     </div>
   </div>
 </div>
+
+{{#if openOffCanvas}}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() { const
+    offcanvasElement = document.getElementById('offCanvas'); const offcanvas =
+    new bootstrap.Offcanvas(offcanvasElement); offcanvas.show(); });
+    console.log('openOffCanvas:',
+    {{openOffCanvas}}); // No script Handlebars
+
+  </script>
+{{/if}}
+
+<script src="js/carrinho.js"></script>
+
+<!-- No final do body -->
+<script
+  src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+></script>
