@@ -75,9 +75,8 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/admin", admin);
 
 //outros
-const PORT = 8081;
-app.listen(PORT, () => {
-  console.log("Servidor rodando " + PORT);
+app.listen(8080, () => {
+  console.log("Servidor rodando na porta 8080");
 });
 
 
