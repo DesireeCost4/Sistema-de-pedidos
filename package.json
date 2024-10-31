@@ -7,6 +7,12 @@
       "use": "@vercel/node"
     }
   ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "app.js"
+    }
+  ],
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
