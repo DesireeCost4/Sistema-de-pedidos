@@ -12,7 +12,6 @@ const admin = require("./routes/admin");
 
 
 
-
 //config
 app.use(
   session({
@@ -20,7 +19,7 @@ app.use(
     resave: true,
     saveUninitialized: true,
   })
-); //
+); 
 app.use(flash());
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -80,3 +79,6 @@ const PORT = 8081;
 app.listen(PORT, () => {
   console.log("Servidor rodando " + PORT);
 });
+
+
+module.exports = app;
