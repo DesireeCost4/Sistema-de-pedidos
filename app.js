@@ -9,7 +9,9 @@ const flash = require("connect-flash");
 const app = express();
 const admin = require("./routes/admin");
 
-//const mongoose = require('mongoose')
+
+
+
 
 //config
 app.use(
@@ -50,15 +52,18 @@ const handlebars = exphbs.create({
 app.engine("handlebars", handlebars.engine);
 app.set("view engine", "handlebars");
 
-//mongoose
+
+//banco de dados
+const mongoURL = "mongodb+srv://desireecdev:y45SiBineq0QW9x4@cluster0.tpwg7.mongodb.net/loja?retryWrites=true&w=majority&appName=Cluster0";
+
 mongoose.Promise = globalThis.Promise;
 mongoose
-  .connect("mongodb://localhost:27017/loja", {
+  .connect(mongoURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("Conectado ao MongoDB");
+    console.log("Conectado ao MongoDB Atlas");
   })
   .catch((err) => {
     console.error("Erro ao conectar ao MongoDB:", err);
