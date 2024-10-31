@@ -1,17 +1,22 @@
 footer {
-  background-color: #343a40; /* Cor de fundo escura */
-  color: white; /* Cor do texto */
+  background-color: #343a40; 
+  color: white; 
+  margin: 0;
 }
 
 footer a {
-  color: white; /* Cor dos links */
+  color: white; 
   transition: color 0.3s;
 }
 
 footer a:hover {
-  color: #ffc107; /* Cor do link ao passar o mouse */
+  color: #ffc107; 
 }
 
 footer h5 {
-  margin-bottom: 15px; /* Espaçamento abaixo dos títulos */
+  margin-bottom: 15px; 
 }
+
+
+
+

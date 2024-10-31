@@ -1,0 +1,26 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .container {
+    flex: 1;
+  }
+  
+  
+
+  .card-produtos, .card {
+    margin-bottom: 5px;
+  }
+  
+  hr {
+    margin: 0;
+  }
+  

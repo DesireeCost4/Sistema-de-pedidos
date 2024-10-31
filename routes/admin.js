@@ -34,7 +34,7 @@ router.get("/login", (req, res) => {
   res.render("admin/login");
 });
 
-// essa rota processa a auth do administrador na view de login
+// processa a auth do administrador na view de login
 router.post("/login", (req, res) => {
   if (req.body.username === "admin" && req.body.password === "senha123") {
     req.session.isAdmin = true; // Definindo o usuário como adm
@@ -67,7 +67,6 @@ router.get("/", (req, res) => {
         produtoNoCarrinho.quantidade * produtoNoCarrinho.preco;
     }
 
-    // Redireciona para abrir o offcanvas após a atualização da quantidade
     return res.redirect("/admin?openOffCanvas=true");
   }
 
@@ -95,7 +94,7 @@ router.get("/", (req, res) => {
 });
 
 //
-// Rota para mostrar produtos cadastrados (apenas adms)
+// mostrar produtos cadastrados (apenas adms)
 router.get("/categorias", verificaAdmin, (req, res) => {
   Categoria.find()
     .then((categorias) => {
@@ -115,7 +114,6 @@ router.post(
   (req, res) => {
     let erros = [];
 
-    // Verificação dos campos obrigatórios
     if (!req.body.nome || req.body.nome.trim() === "") {
       erros.push({ texto: "Nome inválido" });
     }
@@ -128,17 +126,14 @@ router.post(
       erros.push({ texto: "Slug inválido" });
     }
 
-    // Verificação da imagem
     if (!req.file) {
       erros.push({ texto: "Imagem do produto é obrigatória" });
     }
 
-    // Se houver erros, renderiza novamente o formulário
     if (erros.length > 0) {
       return res.render("admin/addcategorias", { erros: erros });
     }
 
-    // Cria nova categoria se não houver erros
     const novaCategoria = {
       nome: req.body.nome,
       preco: req.body.preco,
@@ -193,12 +188,10 @@ router.post("/categorias/edit", upload.single("imagem"), (req, res) => {
         });
       }
 
-      // Atualiza os campos da categoria
       categoria.nome = req.body.nome;
       categoria.preco = req.body.preco;
       categoria.slug = req.body.slug;
 
-      // Se houver uma imagem nova, atualiza o campo de imagem
       if (req.file) {
         categoria.imagem = `/uploads/${req.file.filename}`;
       }
@@ -252,24 +245,20 @@ router.post("/adcionarCarrinho/:nome", async (req, res) => {
     const nomeProduto = req.params.nome;
     const quantidade = parseInt(req.body.quantidade) || 1;
 
-    // Recupera o produto pelo nome e verifica se ele existe
     const produto = await Categoria.findOne({ nome: nomeProduto });
     if (!produto) {
       req.flash("error_msg", "Produto não encontrado.");
       return res.redirect("/admin");
     }
 
-    // Pega o ID, preço e imagem diretamente do banco de dados
     const idProduto = produto._id;
     const preco = parseFloat(produto.preco);
     const imagem = produto.imagem;
 
-    // Verifica se o carrinho já existe na sessão; senão, cria um novo
     if (!req.session.carrinho) {
       req.session.carrinho = [];
     }
 
-    // Verifica se o produto já está no carrinho
     const produtoNoCarrinho = req.session.carrinho.find(
       (item) => item.nomeProduto === nomeProduto
     );
@@ -308,9 +297,9 @@ router.post("/removerCarrinho/:nome", (req, res) => {
   }
 
   req.flash("success_msg", "Produto removido do carrinho!");
-  res.redirect("/admin"); // Redireciona para a página do admin
+  res.redirect("/admin");
 });
-
+//finalizar o pedido
 router.post("/enviarCarrinhoWhatsApp", (req, res) => {
   const carrinho = req.session.carrinho || [];
   const nomeCliente = req.body.nomeCliente;
@@ -336,7 +325,7 @@ router.post("/enviarCarrinhoWhatsApp", (req, res) => {
 
   mensagem += `\n*Valor Total do Carrinho: R$ ${valorTotal.toFixed(2)}*`;
 
-  const linkWhatsApp = `https://api.whatsapp.com/send?phone=5531999999999&text=${encodeURIComponent(
+  const linkWhatsApp = `https://api.whatsapp.com/send?phone=5531900000000&text=${encodeURIComponent(
     mensagem
   )}`;
 

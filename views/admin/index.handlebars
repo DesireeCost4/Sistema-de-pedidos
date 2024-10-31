@@ -49,7 +49,7 @@
       </div>
     </form>
   {{else}}
-    <p>Nenhuma categoria encontrada.</p>
+    <p>Nenhum produto cadastrado.</p>
   {{/each}}
 </div>
 
@@ -157,14 +157,12 @@
     offcanvasElement = document.getElementById('offCanvas'); const offcanvas =
     new bootstrap.Offcanvas(offcanvasElement); offcanvas.show(); });
     console.log('openOffCanvas:',
-    {{openOffCanvas}}); // No script Handlebars
-
+    {{openOffCanvas}});
   </script>
 {{/if}}
 
 <script src="js/carrinho.js"></script>
 
-<!-- No final do body -->
 <script
   src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
 ></script>
