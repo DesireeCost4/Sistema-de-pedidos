@@ -20,6 +20,7 @@ app.use(
     saveUninitialized: true,
   })
 ); 
+
 app.use(flash());
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -74,10 +75,11 @@ app.use(express.static(path.join(__dirname, "public")));
 //rotas
 app.use("/admin", admin);
 
-//outros
-app.listen(8080, () => {
-  console.log("Servidor rodando na porta 8080");
+
+app.use((req, res) => {
+  res.status(404).send('Página não encontrada');
 });
+
 
 
 module.exports = app;
